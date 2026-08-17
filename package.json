@@ -48,7 +48,7 @@
     "lib/index.js",
     "cordis.patch.yml",
     "lib/client.js",
-    "screenshot.png",
+    "cover1.png",
     "README.md"
   ],
   "scripts": {

@@ -3,7 +3,7 @@
 <p align="center"><strong>DeepSeek Harness web background settings plugin with solid color, image, and opacity controls.</strong></p>
 
 <p align="center">
-  <img src="screenshot.png" alt="web-background settings" width="80%" />
+  <img src="cover1.png" alt="web-background settings" width="80%" />
 </p>
 
 ## 功能
