@@ -139,6 +139,7 @@ const zh = {
   'removeImage': '移除图片',
   'chooseImageFirst': '请先选择一张本地图片。',
   'opacity': '不透明度',
+  'reset': '恢复默认',
   'hint': '纯色或图片会显示在主内容区和侧栏后面，消息气泡保持原有背景。',
   'errorTooLarge': '图片太大，无法保存。',
   'errorRead': '无法读取这张图片。',
@@ -155,6 +156,7 @@ const en = {
   'removeImage': 'Remove image',
   'chooseImageFirst': 'Choose a local image first.',
   'opacity': 'Opacity',
+  'reset': 'Reset',
   'hint': 'The color or image appears behind the main canvas and sidebar; message bubbles keep their original background.',
   'errorTooLarge': 'Image is too large to save.',
   'errorRead': 'Could not read that image.',
@@ -331,9 +333,10 @@ function BackgroundRow(props) {
   const [error, setError] = React.useState(null)
   const fileRef = React.useRef(null)
   const t = props.t || ((key) => key)
+  const stateRef = React.useRef(state)
+  stateRef.current = state
 
-  const commit = (next) => {
-    setState(next)
+  const persist = (next) => {
     if (next.type === 'color') {
       writeStorage(STORAGE_COLOR, next.color)
     }
@@ -342,25 +345,41 @@ function BackgroundRow(props) {
     }
     writeStorage(STORAGE_TYPE, next.type)
     writeStorage(STORAGE_OPACITY, String(next.opacity))
+  }
+
+  const commit = (updater) => {
+    const prev = stateRef.current
+    const next = typeof updater === 'function' ? updater(prev) : updater
+    stateRef.current = next
+    setState(next)
+    persist(next)
     applyBackground(props.ctx)
   }
 
   const setType = (type) => {
-    commit({ ...state, type })
+    commit((prev) => ({ ...prev, type }))
   }
 
   const setColor = (color) => {
     const nextColor = sanitizeColor(color)
-    commit({ ...state, type: 'color', color: nextColor })
+    commit((prev) => ({ ...prev, type: 'color', color: nextColor }))
   }
 
   const setOpacity = (percent) => {
-    commit({ ...state, opacity: clampOpacity(percent / 100) })
+    commit((prev) => ({ ...prev, opacity: clampOpacity(percent / 100) }))
   }
 
   const removeImage = () => {
     writeStorage(STORAGE_IMAGE, null)
-    commit({ ...state, type: 'none', image: null })
+    commit((prev) => ({ ...prev, type: 'none', image: null }))
+  }
+
+  const reset = () => {
+    writeStorage(STORAGE_TYPE, null)
+    writeStorage(STORAGE_COLOR, null)
+    writeStorage(STORAGE_IMAGE, null)
+    writeStorage(STORAGE_OPACITY, null)
+    commit({ type: 'none', color: DEFAULT_COLOR, image: null, opacity: DEFAULT_OPACITY })
   }
 
   const onFile = (event) => {
@@ -377,9 +396,22 @@ function BackgroundRow(props) {
         return
       }
       setError(null)
-      commit({ ...state, type: 'image', image: dataUrl })
+      commit((prev) => ({ ...prev, type: 'image', image: dataUrl }))
     })
   }
+
+  React.useEffect(() => {
+    const onStorage = (event) => {
+      if (!event.key || !event.key.startsWith('web-background:')) return
+      const next = readState()
+      stateRef.current = next
+      setState(next)
+      setError(null)
+      applyBackground(props.ctx)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [props.ctx])
 
   const typeButtons = TYPES.map((type) => React.createElement('button', {
     key: type,
@@ -445,6 +477,13 @@ function BackgroundRow(props) {
         onChange: (event) => setOpacity(Number(event.target.value)),
       }),
       React.createElement('span', { style: styles.sliderValue }, `${Math.round(state.opacity * 100)}%`),
+    ),
+    React.createElement('div', { style: styles.row },
+      React.createElement('button', {
+        type: 'button',
+        style: { ...styles.button, ...styles.buttonDanger },
+        onClick: reset,
+      }, t('reset')),
     ),
     error ? React.createElement('div', { style: styles.error }, t(error)) : null,
     React.createElement('div', { style: styles.hint }, t('hint')),
