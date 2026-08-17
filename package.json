@@ -3,6 +3,19 @@
   "version": "0.1.0",
   "description": "DeepSeek Harness web background settings plugin with solid color, image, and opacity controls.",
   "license": "MIT",
+  "author": "lndyzwdxhs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lndyzwdxhs/web-background.git"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "web",
+    "background",
+    "wallpaper"
+  ],
   "type": "module",
   "main": "lib/index.js",
   "exports": {

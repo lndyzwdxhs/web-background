@@ -18,7 +18,7 @@
 
 ```sh
 # git 源安装（构建产物入库）
-dsh plugin --profile web add "github:<owner>/web-background#main"
+dsh plugin --profile web add "github:lndyzwdxhs/web-background#main"
 
 # 或本地目录
 cd /path/to/web-background
