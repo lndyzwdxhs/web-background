@@ -47,5 +47,5 @@
 
 ## 阶段 6：发布与最终验证
 
-- [ ] 已推送到目标 ref / 已发布
-- [ ] 从目标 ref 重新安装并重启 web 验证通过
+- [x] 已推送到 `github:lndyzwdxhs/web-background#main`
+- [x] 已从目标 ref 重新安装并重启 web 验证通过
