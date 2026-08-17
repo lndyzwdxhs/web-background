@@ -39,10 +39,11 @@
 ## 阶段 5：发布准备
 
 - [x] Git 仓库初始化并完成首次提交
-- [ ] 关联真实 remote
-- [ ] README 使用真实安装 ref
+- [x] 关联真实 remote
+- [x] README 使用真实安装 ref
 - [x] README 有截图（UI 插件）
 - [x] 构建产物已提交
+- [ ] 设置 GitHub 仓库 description 和 topics（`gh repo edit` 因 token 权限返回 403）
 
 ## 阶段 6：发布与最终验证
 
