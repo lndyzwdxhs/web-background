@@ -1,0 +1,47 @@
+{
+  "name": "web-background",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness web background settings plugin with solid color, image, and opacity controls.",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./client": "./lib/client.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ]
+    }
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "@types/react": "~18.3.1",
+    "react": "^18.2.0"
+  },
+  "files": [
+    "lib/index.js",
+    "cordis.patch.yml",
+    "lib/client.js",
+    "screenshot.png",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "bundle": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "gates": "node scripts/gates/run.mjs"
+  }
+}
